@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PANEL OPERATORSKI</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    background:#151515;
+    overflow:hidden;
+}
+
+#loginScreen{
+
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+
+    background:#111;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:9999;
+
+}
+
+#loginBox{
+
+    width:340px;
+
+    background:#2b2b2b;
+
+    padding:30px;
+
+    border-radius:12px;
+
+    box-shadow:0 0 30px rgba(0,0,0,.5);
+
+}
+
+#loginBox h1{
+
+    text-align:center;
+
+    color:white;
+
+    margin-bottom:25px;
+
+    font-size:30px;
+
+}
+
+#loginBox input{
+
+    width:100%;
+
+    padding:12px;
+
+    margin-bottom:15px;
+
+    border:none;
+
+    border-radius:6px;
+
+    font-size:16px;
+
+}
+
+#loginBox button{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#27ae60;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+#loginError{
+
+    margin-top:15px;
+
+    color:#ff4444;
+
+    text-align:center;
+
+    height:22px;
+
+}
+
+#app{
+
+    display:none;
+
+    width:100vw;
+    height:100vh;
+
+    overflow:auto;
+
+    background:#202020;
+
+}
+
+#mapContainer{
+
+    position:relative;
+
+    width:1920px;
+
+    margin:auto;
+
+}
+
+#map{
+
+    width:100%;
+
+    display:block;
+
+}
+
+.hotspot{
+
+    position:absolute;
+
+    width:28px;
+
+    height:28px;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    background:rgba(0,255,0,.01);
+
+}
+
+.hotspot:hover{
+
+    background:rgba(255,255,255,.08);
+
+}
+
+.led{
+
+    position:absolute;
+
+    width:20px;
+
+    height:20px;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    transition:.2s;
+
+}
+
+.on{
+
+    background:#00ff00;
+
+    box-shadow:
+    0 0 10px #00ff00,
+    0 0 18px #00ff00,
+    0 0 30px #00ff00;
+
+}
+
+.off{
+
+    background:#ff0000;
+
+    box-shadow:
+    0 0 10px #ff0000,
+    0 0 18px #ff0000,
+    0 0 30px #ff0000;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="loginScreen">
+
+<div id="loginBox">
+
+<h1>PANEL OPERATORSKI</h1>
+
+<input
+id="login"
+placeholder="LOGIN">
+
+<input
+id="password"
+type="password"
+placeholder="HASŁO">
+
+<button onclick="login()">
+
+ZALOGUJ
+
+</button>
+
+<div id="loginError"></div>
+
+</div>
+
+</div>
+
+<div id="app">
+
+<div id="mapContainer">
+
+<img
+src="NOWY2.png"
+id="map">
+
+<!-- HOTSPOTY BĘDĄ DODANE W CZĘŚCI 2 -->
+
+<!-- ================= HOTSPOTY ================= -->
+
+<!-- WAGA -->
+<div class="hotspot" id="h0" style="left:1398px;top:76px" onclick="toggle(0)"></div>
+<div class="led on" id="l0" style="left:1398px;top:76px"></div>
+
+<!-- SKŁADNIK 5 -->
+<div class="hotspot" id="h1" style="left:1810px;top:67px" onclick="toggle(1)"></div>
+<div class="led on" id="l1" style="left:1810px;top:67px"></div>
+
+<!-- SKŁADNIK 4 -->
+<div class="hotspot" id="h2" style="left:1700px;top:357px" onclick="toggle(2)"></div>
+<div class="led on" id="l2" style="left:1700px;top:357px"></div>
+
+<!-- ROZDRABNIACZ 2 -->
+<div class="hotspot" id="h3" style="left:868px;top:292px" onclick="toggle(3)"></div>
+<div class="led on" id="l3" style="left:872px;top:292px"></div>
+
+<!-- POJEMNIK PASZA 1 -->
+<div class="hotspot" id="h4" style="left:1093px;top:359px" onclick="toggle(4)"></div>
+<div class="led on" id="l4" style="left:1093px;top:359px"></div>
+
+<!-- POJEMNIK PASZA 2 -->
+<div class="hotspot" id="h5" style="left:1280px;top:359px" onclick="toggle(5)"></div>
+<div class="led on" id="l5" style="left:1280px;top:359px"></div>
+
+<!-- POJEMNIK PASZA 3 -->
+<div class="hotspot" id="h6" style="left:1460px;top:359px" onclick="toggle(6)"></div>
+<div class="led on" id="l6" style="left:1460px;top:359px"></div>
+
+<!-- MIESZALNIK PIONOWY -->
+<div class="hotspot" id="h7" style="left:917px;top:835px" onclick="toggle(7)"></div>
+<div class="led on" id="l7" style="left:917px;top:839px"></div>
+
+<!-- SILOS 1 -->
+<div class="hotspot" id="h8" style="left:350px;top:1325px" onclick="toggle(8)"></div>
+<div class="led on" id="l8" style="left:350px;top:1329px"></div>
+
+<!-- SILOS 2 -->
+<div class="hotspot" id="h9" style="left:790px;top:1325px" onclick="toggle(9)"></div>
+<div class="led on" id="l9" style="left:790px;top:1329px"></div>
+
+<!-- SILOS 3 -->
+<div class="hotspot" id="h10" style="left:1070px;top:1325px" onclick="toggle(10)"></div>
+<div class="led on" id="l10" style="left:1074px;top:1329px"></div>
+
+<!-- ROZDRABNIACZ KSS -->
+<div class="hotspot" id="h11" style="left:890px;top:1605px" onclick="toggle(11)"></div>
+<div class="led on" id="l11" style="left:890px;top:1605px"></div>
+
+<!-- MIESZALNIK POZIOMY -->
+<div class="hotspot" id="h12" style="left:720px;top:980px" onclick="toggle(12)"></div>
+<div class="led on" id="l12" style="left:720px;top:980px"></div>
+
+<!-- SLM -->
+<div class="hotspot" id="h13" style="left:342px;top:704px" onclick="toggle(13)"></div>
+<div class="led on" id="l13" style="left:342px;top:704px"></div>
+
+</div>
+</div>
+<script>
+
+const USER="admin";
+const PASS="Silos123";
+
+let states=[];
+
+function login(){
+
+    const u=document.getElementById("login").value;
+    const p=document.getElementById("password").value;
+
+    if(u===USER && p===PASS){
+
+        document.getElementById("loginScreen").style.display="none";
+        document.getElementById("app").style.display="block";
+
+        loadStates();
+
+        return;
+    }
+
+    document.getElementById("loginError").innerHTML="Nieprawidłowy login lub hasło";
+
+}
+
+function loadStates(){
+
+    let s=localStorage.getItem("panelStates");
+
+    if(s==null){
+
+        states=[];
+
+        for(let i=0;i<12;i++)
+            states.push(true);
+
+        saveStates();
+
+    }else{
+
+        states=JSON.parse(s);
+
+    }
+
+    refresh();
+
+}
+
+function saveStates(){
+
+    localStorage.setItem(
+        "panelStates",
+        JSON.stringify(states)
+    );
+
+}
+
+function toggle(id){
+
+    states[id]=!states[id];
+
+    saveStates();
+
+    refresh();
+
+}
+
+function refresh(){
+
+    for(let i=0;i<states.length;i++){
+
+        let led=document.getElementById("l"+i);
+
+        if(!led) continue;
+
+        if(states[i]){
+
+            led.classList.remove("off");
+            led.classList.add("on");
+
+        }else{
+
+            led.classList.remove("on");
+            led.classList.add("off");
+
+        }
+
+    }
+
+}
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key==="Enter")
+        login();
+
+});
+
+
+/* ============================================
+   Automatyczne logowanie
+============================================ */
+
+window.onload=function(){
+
+    if(localStorage.getItem("logged")==="1"){
+
+        document.getElementById("loginScreen").style.display="none";
+        document.getElementById("app").style.display="block";
+
+        loadStates();
+
+    }
+
+}
+
+function login(){
+
+    const u=document.getElementById("login").value.trim();
+    const p=document.getElementById("password").value.trim();
+
+    if(u===USER && p===PASS){
+
+        localStorage.setItem("logged","1");
+
+        document.getElementById("loginScreen").style.display="none";
+        document.getElementById("app").style.display="block";
+
+        loadStates();
+
+    }
+    else{
+
+        document.getElementById("loginError").innerHTML="Błędny login lub hasło";
+
+    }
+
+}
+
+function logout(){
+
+    localStorage.removeItem("logged");
+
+    location.reload();
+
+}
+
+/* ============================================
+   Responsywność
+============================================ */
+
+function scaleMap(){
+
+    const map=document.getElementById("mapContainer");
+
+    if(!map) return;
+
+    const w=window.innerWidth;
+
+    let scale=w/1920;
+
+    if(scale>1) scale=1;
+
+    map.style.transform="scale("+scale+")";
+    map.style.transformOrigin="top left";
+
+    map.style.height=(1600*scale)+"px";
+
+}
+
+window.addEventListener("resize",scaleMap);
+
+setTimeout(scaleMap,100);
+
+/* ============================================
+   Dodanie przycisku WYLOGUJ
+============================================ */
+
+const btn=document.createElement("button");
+
+btn.innerHTML="WYLOGUJ";
+
+btn.style.position="fixed";
+btn.style.right="20px";
+btn.style.top="20px";
+btn.style.padding="12px 18px";
+btn.style.background="#d32f2f";
+btn.style.color="white";
+btn.style.border="0";
+btn.style.borderRadius="6px";
+btn.style.cursor="pointer";
+btn.style.fontWeight="bold";
+btn.style.zIndex="999";
+
+btn.onclick=logout;
+
+document.body.appendChild(btn);
+
+</script>
+
+</body>
+
+</html>
